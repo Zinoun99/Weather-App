@@ -11,6 +11,7 @@ public class City {
     private int currentTemperature;
     private int currentHumidity;
     private int currentWindSpeed;
+    public City(){}
     
     public City(int cityId, String cityName, int currentTemperature, int currentHumidity, int currentWindSpeed){
         this.cityId=cityId;
@@ -59,7 +60,7 @@ public class City {
         this.currentWindSpeed = currentWindSpeed;
     }
 
-    public static List<City> getAllCity() throws SQLException {
+    public static List<City> displayCity() throws SQLException {
         List<City> cities = new ArrayList<>();
         String sql = "SELECT * FROM city";
         Connection connection = Menu.getConnection();
@@ -86,48 +87,57 @@ public class City {
         statement.setInt(1, city.getCityId());
         statement.setString(2, city.getCityName());
         statement.setInt(3, city.getCurrentTemperature());
-        statement.setInt(3, city.getCurrentHumidity());
-        statement.setInt(3, city.getCurrentWindSpeed());
+        statement.setInt(4, city.getCurrentHumidity());
+        statement.setInt(5, city.getCurrentWindSpeed());
         statement.executeUpdate();
         connection.close();
         statement.close();
         System.out.println("City updated successfully!");
     }
 
-    public void updateCity(City City) throws SQLException {
+    public static void updateCity(City City) throws SQLException {
         String sql = "UPDATE City SET cityId = ?, Name city = ?, Temperature = ?, CurrentHumidity = ?, CurrentWindSpeed = ?";
         Connection connection = Menu.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, City.getCityId());
         statement.setString(2, City.getCityName());
         statement.setInt(3, City.getCurrentTemperature());
-        statement.setInt(3, City.getCurrentHumidity());
-        statement.setInt(3, City.getCurrentWindSpeed());
+        statement.setInt(4, City.getCurrentHumidity());
+        statement.setInt(5, City.getCurrentWindSpeed());
         statement.executeUpdate();
         connection.close();
         statement.close();
         System.out.println("City updated successfully!");
     }
 
-    public void deleteCity(int cityId) throws SQLException {
+    public static void deleteCity(City city) throws SQLException {
         String sql = "DELETE FROM city WHERE cityId = ?";
         Connection connection = Menu.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, cityId);
+        statement.setInt(1, city.cityId);
         statement.executeUpdate();
         connection.close();
         statement.close();
         System.out.println("City deleted successfully!");
     }
+    public static void SearchCity(String name)throws SQLException{
+        ArrayList<City> search = new ArrayList<>();
+        String sql="SELECT * FROM city WHERE cityName = ?";
+        Connection connection=Menu.getConnection();
+        PreparedStatement statement=connection.prepareStatement(sql);
+        statement.setString(1,name);
+        ResultSet resultSet= statement.executeQuery();
+        while (resultSet.next()){
+            int cityId= resultSet.getInt("cityId");
+            String cityName=resultSet.getString("cityName");
+            int currentTemperature=resultSet.getInt("currentTemperature");
+            int currentHumidity=resultSet.getInt("currentHumidity");
+            int currentWindSpeed=resultSet.getInt("currentWindSpeed");
+            search.add(new City(cityId,cityName,currentTemperature,currentHumidity,currentWindSpeed));
+            System.out.println("Id: "+cityId+"\n Name: "+cityName+"\n currentTemperature: "+currentTemperature+"\n currentHumidity: "+currentWindSpeed);
+        }
 
-    @Override
-    public String toString() {
-        return "City{" +
-                "cityId=" + cityId +
-                ", cityName='" + cityName + '\'' +
-                ", currentTemperature=" + currentTemperature +
-                ", currentHumidity=" + currentHumidity +
-                ", currentWindSpeed=" + currentWindSpeed +
-                '}';
+        connection.close();
+        statement.close();
     }
 }
