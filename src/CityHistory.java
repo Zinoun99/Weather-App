@@ -70,7 +70,7 @@ public class CityHistory {
     }
 
     public static void addCityHistory(CityHistory cityHistory) throws SQLException {
-        String sql = "INSERT INTO City (historicalDataId, cityId, eventDate, temperature) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO CityHistory (historicalDataId, cityId, eventDate, temperature) VALUES (?, ?, ?, ?)";
         Connection connection = Menu.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, cityHistory.getHistoricalDataId());
@@ -80,8 +80,9 @@ public class CityHistory {
         statement.executeUpdate();
         connection.close();
         statement.close();
-        System.out.println("City updated successfully!");
+        System.out.println("City history added successfully!");
     }
+
 
     public static void updateCityHistory(CityHistory cityHistory) throws SQLException {
         String sql = "UPDATE cityhistory SET historicalDataId = ?, cityId = ?, eventDate = ?, temperature = ?";

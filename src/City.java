@@ -95,20 +95,21 @@ public class City {
         System.out.println("City updated successfully!");
     }
 
-    public static void updateCity(City City) throws SQLException {
-        String sql = "UPDATE City SET cityId = ?, Name city = ?, Temperature = ?, CurrentHumidity = ?, CurrentWindSpeed = ?";
+    public static void updateCity(City city) throws SQLException {
+        String sql = "UPDATE City SET cityName = ?, currentTemperature = ?, currentHumidity = ?, currentWindSpeed = ? WHERE cityId = ?";
         Connection connection = Menu.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, City.getCityId());
-        statement.setString(2, City.getCityName());
-        statement.setInt(3, City.getCurrentTemperature());
-        statement.setInt(4, City.getCurrentHumidity());
-        statement.setInt(5, City.getCurrentWindSpeed());
+        statement.setString(1, city.getCityName());
+        statement.setInt(2, city.getCurrentTemperature());
+        statement.setInt(3, city.getCurrentHumidity());
+        statement.setInt(4, city.getCurrentWindSpeed());
+        statement.setInt(5, city.getCityId());
         statement.executeUpdate();
         connection.close();
         statement.close();
         System.out.println("City updated successfully!");
     }
+
 
     public static void deleteCity(City city) throws SQLException {
         String sql = "DELETE FROM city WHERE cityId = ?";
@@ -134,7 +135,7 @@ public class City {
             int currentHumidity=resultSet.getInt("currentHumidity");
             int currentWindSpeed=resultSet.getInt("currentWindSpeed");
             search.add(new City(cityId,cityName,currentTemperature,currentHumidity,currentWindSpeed));
-            System.out.println("Id: "+cityId+"\n Name: "+cityName+"\n currentTemperature: "+currentTemperature+"\n currentHumidity: "+currentWindSpeed);
+            System.out.println("cityId: "+cityId+"\n city Name: "+cityName+"\n currentTemperature: "+currentTemperature+"\n currentHumidity: "+currentWindSpeed);
         }
 
         connection.close();
